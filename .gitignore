@@ -1,2 +1,6 @@
 *.xml
 *.html
+htmls/
+xmls/
+batch/
+backup_xmls/

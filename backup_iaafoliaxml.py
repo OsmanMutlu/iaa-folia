@@ -5,7 +5,6 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 
 from pprint import pprint
 import re
-import codecs
 import argparse
 import sys
 import json
@@ -153,7 +152,7 @@ def evaluate(docs, Class, foliaset, reference, do_corrections=False, do_confusio
 
         #Osman
 #        target_vals = [re.sub(r".*s\.(\d+)\.w\.(\d+)$", r"bothfolia.sentences()[\g<1>].words(\g<2>)", target.id) for target in targets]
-        target_vals = {"match" : "Target_miss", "values" : [(int(re.search(r"s\.(\d+)\.w\.(\d+)$", target.id).group(1))-1, int(re.search(r"s\.(\d+)\.w\.(\d+)$", target.id).group(2))-1) for target in targets]}
+        target_vals = {"match" : False, "values" : [(int(re.search(r"s\.(\d+)\.w\.(\d+)$", target.id).group(1))-1, int(re.search(r"s\.(\d+)\.w\.(\d+)$", target.id).group(2))-1) for target in targets]}
 #        pprint(target_vals)
         if evaluator.target_misses:
             if reference and linkchain[0] is None:
@@ -174,16 +173,6 @@ def evaluate(docs, Class, foliaset, reference, do_corrections=False, do_confusio
             if do_corrections:
                 evaluation['correctionclass']['false'+polarity] += 1
                 evaluation['correction']['false'+polarity] += 1
-
-# We send the other doc's annotation because target missed
-            docnum = next(iter(evaluator.target_misses))
-
-            if docnum == 0:
-                value = get_value(linkchain[1][-1],Class)
-            else:
-                value = get_value(linkchain[0][-1],Class)
-            target_vals["tag"] = value
-
         else:
             evaluation['targets']['truepos']  += 1
 
@@ -191,21 +180,13 @@ def evaluate(docs, Class, foliaset, reference, do_corrections=False, do_confusio
                 print("[" + valuelabel.upper() + " MATCHES]\t" + targets_label + "\t" + value)
 
                 #Osman
-                target_vals["match"] = "Value_match"
-                target_vals["tag"] = value
-
-            print(evaluator.value_misses)
+                target_vals["match"] = True
+                target_vals["class"] = value
 
             for value, docset in evaluator.value_misses:
+#Didn't take misses into account. Maybe later
                 print("[" + valuelabel.upper() + " MISSED]\t@" + ",".join([str(x+1) for x in docset]) + "\t" + targets_label + "\t" + value)
                 print("MISSEEEEEEEEEES!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-# Osman
-                otherdoc = [str(x+1) for x in list(docset)][0]
-                if otherdoc == "1":
-                    target_vals["tag2"] = value
-                else:
-                    target_vals["tag1"] = value
-                target_vals["match"] = "Value_miss"
 
             if do_corrections:
                 for correctionclass in evaluator.correctionclass_matches:
@@ -292,6 +273,7 @@ def evaluate(docs, Class, foliaset, reference, do_corrections=False, do_confusio
 
 
     return evaluation
+
 
 def iter_linkchain(linkchain, do_corrections):
     for i, annotations in enumerate(linkchain):
@@ -408,10 +390,8 @@ def main():
 #            bothfolia = temp
 
 #Doc1 and doc2 begins with selim_docname and sumercan_docname respectively. These are our annotators
-    bothfile = re.sub(r"^batch\/selim_(.*)", r"both_\g<1>", args.documents[0])
-#    print(str(bothfile))
-
-
+    bothfile = re.sub(r"^\w+_(.*)", r"both_\g<1>", args.documents[0])
+    print(str(bothfile))
     bothfolia = folia.Document(file=bothfile)
 
     try:
@@ -445,88 +425,68 @@ def main():
         for sentence in docs[0].sentences():
             for word in sentence.words():
                 wordc = wordc + 1
-        truean = evaluation['targets']['truepos']
-        falsean = evaluation['targets']['falseneg']
-        truean_misses = evaluation['class']['truepos']
-        falsean_misses = evaluation['class']['falseneg'] + evaluation['class']['falsepos']
+        truean = evaluation['class']['truepos']
+        falsean = evaluation['class']['falseneg'] + evaluation['class']['falsepos']
         cohen_kappa = ((truean/(truean+falsean))-((truean+falsean)/wordc))/(1-((falsean+truean)/wordc))
-        cohen_kappa_misses = ((truean_misses/(truean_misses+falsean_misses))-((truean_misses+falsean_misses)/wordc))/(1-((falsean_misses+truean_misses)/wordc))
+        print("Cohen's Kappa Score : " + str(cohen_kappa))
 
-        kappa_tags = {}
-        kappa_tags["kappa"] = cohen_kappa
-        kappa_tags["kappa_miss"] = cohen_kappa_misses
-
-        print("Cohen Kappa Score : " + str(cohen_kappa) + "  (Value Misses not Included)")
-        print("Cohen Kappa Score : " + str(cohen_kappa_misses) + "  (Value Misses Included)")
-
+#Class Must be added!!!!!!!
         targets_doc2 = []
         targets_doc1 = []
         sentences = list(bothfolia.sentences())
-
-        cnt = Counter()
         for target_vals2 in evaluation['osman_targets']:
-
             wordsList = []
             for value in target_vals2["values"]:
                 wordsList.append(sentences[value[0]].words(value[1]))
 #            print("words", wordsList)
-            if target_vals2["match"] == "Value_match":
-                cnt[foliaset[57:-13] + "_" + target_vals2["tag"]] += 2
-                wordsList[0].add(folia.Entity, *wordsList, cls=target_vals2["tag"], set=foliaset, annotator="Both")
-            elif target_vals2["match"] == "Value_miss":
-                cnt[foliaset[57:-13] + "_" + target_vals2["tag1"]] += 1
-                cnt[foliaset[57:-13] + "_" + target_vals2["tag2"]] += 1
-                wordsList[0].add(folia.Entity, *wordsList, cls=target_vals2["tag1"], set=foliaset, annotator="Doc1")
-                wordsList[0].add(folia.Entity, *wordsList, cls=target_vals2["tag2"], set=foliaset, annotator="Doc2")
+            if target_vals2["match"]:
+                wordsList[0].add(folia.Entity, *wordsList, cls=target_vals2['class'], set=foliaset, annotator="Both")
             else:
-                cnt[foliaset[57:-13] + "_" + target_vals2["tag"]] += 1
                 if target_vals2["doc"] == "1":
-                    targets_doc1.append(target_vals2)
+                    targets_doc1.append(target_vals2["values"])
 #                    pprint(target_vals2["values"])
                 else:
-                    targets_doc2.append(target_vals2)
+                    targets_doc2.append(target_vals2["values"])
 
         partial_match_count = 0
         partial_miss_count = 0
         for target_vals3 in targets_doc1:
-#            target_vals3["values"] = list(target_vals3["values"].items())
+#            target_vals3 = list(target_vals3.items())
 #            pprint(target_vals3)
             if not targets_doc2:
-                #annotate target_vals3["values"]
+                #annotate target_vals3
                 wordsList_vals3 = []
-                for value in target_vals3["values"]:
+                for value in target_vals3:
                     wordsList_vals3.append(sentences[value[0]].words(value[1]))
-                wordsList_vals3[0].add(folia.Entity, *wordsList_vals3, cls=target_vals3["tag"], set=foliaset, annotator="Doc1")
+                wordsList_vals3[0].add(folia.Entity, *wordsList_vals3, cls=target_vals3['class'], set=foliaset, annotator="Doc1")
 
-                partial_miss_count = partial_miss_count + len(target_vals3["values"]) - 1
+                partial_miss_count = partial_miss_count + len(target_vals3) - 1
 
                 continue
 
             same_lens = []
             for i,target_vals4 in enumerate(targets_doc2):
-#                pprint(target_vals4)
 
-                same = list(set(target_vals3["values"]) & set(target_vals4["values"]))
+                same = list(set(target_vals3) & set(target_vals4))
 #                print(same)
                 if same:
-                    if target_vals3["tag"] == target_vals4["tag"]:
-                        same_lens.append(len(same))
+                    same_lens.append(len(same))
                 else:
                     same_lens.append(0)
 #            pprint(targets_doc2)
 
 # Maybe not only the longest but every same != 0 should be accounted (for 1 span in doc1 -> 2 spans in doc2 situtations)
-# The words that overlapped before shouldn't be accounted again (For the every same)
             longest_len = sorted(same_lens)[-1]
             if longest_len != 0:
+                partial_match_count = partial_match_count + longest_len
                 ind = same_lens.index(longest_len)
                 wordsList_same = []
-                sameSet = set(target_vals3["values"]) & set(targets_doc2[ind]["values"])
-                vals4_unique_list = list(set(target_vals3["values"]) - sameSet)
+                sameSet = set(target_vals3) & set(targets_doc2[ind])
+                vals4_unique_list = list(set(target_vals3) - sameSet)
                 # -1 because we already add one to falsean for every span annotation
                 partial_miss_count = partial_miss_count + len(vals4_unique_list) - 1
                 wordsList_doc1 = []
-                vals3_unique_list = list(set(targets_doc2[ind]["values"]) - sameSet)
+                vals3_unique_list = list(set(targets_doc2[ind]) - sameSet)
                 partial_miss_count = partial_miss_count + len(vals3_unique_list) - 1
                 wordsList_doc2 = []
                 for value in list(sameSet):
@@ -537,54 +497,38 @@ def main():
                     wordsList_doc2.append(sentences[value[0]].words(value[1]))
                 #annotate same and uniques
                 if wordsList_same:
-                    partial_match_count = partial_match_count + longest_len
-                    wordsList_same[0].add(folia.Entity, *wordsList_same, cls=target_vals3["tag"], set=foliaset, annotator="Both")
+                    wordsList_same[0].add(folia.Entity, *wordsList_same, cls=target_vals3['class'], set=foliaset, annotator="Both")
                 if wordsList_doc1:
-                    wordsList_doc1[0].add(folia.Entity, *wordsList_doc1, cls=target_vals3["tag"], set=foliaset, annotator="Doc1")
+                    wordsList_doc1[0].add(folia.Entity, *wordsList_doc1, cls=target_vals3['class'], set=foliaset, annotator="Doc1")
                 if wordsList_doc2:
-                    wordsList_doc2[0].add(folia.Entity, *wordsList_doc2, cls=target_vals3["tag"], set=foliaset, annotator="Doc2")
-                #remove target_vals4["values"]
+                    wordsList_doc2[0].add(folia.Entity, *wordsList_doc2, cls=target_vals3['class'], set=foliaset, annotator="Doc2")
+                #remove target_vals4
                 del targets_doc2[ind]
             else:
-                #annotate target_vals3["values"]
+                #annotate target_vals3
                 wordsList_vals3 = []
-                for value in target_vals3["values"]:
+                for value in target_vals3:
                     wordsList_vals3.append(sentences[value[0]].words(value[1]))
-                wordsList_vals3[0].add(folia.Entity, *wordsList_vals3, cls=target_vals3["tag"], set=foliaset, annotator="Doc1")
+                wordsList_vals3[0].add(folia.Entity, *wordsList_vals3, cls=target_vals3['class'], set=foliaset, annotator="Doc1")
 
         if targets_doc2:
             for target_vals4 in targets_doc2:
 
                 wordsList_vals4 = []
-                for value in target_vals4["values"]:
+                for value in target_vals4:
                     wordsList_vals4.append(sentences[value[0]].words(value[1]))
-                wordsList_vals4[0].add(folia.Entity, *wordsList_vals4, cls=target_vals4["tag"], set=foliaset, annotator="Doc2")
+                wordsList_vals4[0].add(folia.Entity, *wordsList_vals4, cls=target_vals4["class"], set=foliaset, annotator="Doc2")
 
-                partial_miss_count = partial_miss_count + len(target_vals4["values"]) - 1
+                partial_miss_count = partial_miss_count + len(target_vals4) - 1
 
-    bothfile = re.sub(r"both_(.*)", r"both_" + foliaset[57:-13] + "_\g<1>", bothfile)
-
-    bothfolia.save(bothfile)
+    bothfolia.save("/home/osman/work/iaa/xmls/both_" + foliaset[57:-13] + re.sub(r"^both_(.*)", r"_\g<1>", bothfile))
 
     truean = truean + partial_match_count
     falsean = falsean + partial_miss_count
 
-    truean_misses = truean_misses + partial_match_count
-    falsean_misses = falsean_misses + partial_miss_count
-
     cohen_kappa = ((truean/(truean+falsean))-((truean+falsean)/wordc))/(1-((falsean+truean)/wordc))
-    cohen_kappa_misses = ((truean_misses/(truean_misses+falsean_misses))-((truean_misses+falsean_misses)/wordc))/(1-((falsean_misses+truean_misses)/wordc))
 
-    print("Cohen Kappa Score for Partial Match : " + str(cohen_kappa) + "  (Value Misses not Included)")
-    print("Cohen Kappa Score for Partial Match : " + str(cohen_kappa_misses) + "  (Value Misses Included)")
-    print(cnt)
-
-    kappa_tags["kappa_part"] = cohen_kappa
-    kappa_tags["kappa_part_miss"] = cohen_kappa_misses
-    kappa_tags["tag_count"] = cnt
-
-    with codecs.open("kappa_tags.jl", "a", "utf-8") as f:
-        f.write(json.dumps(kappa_tags, ensure_ascii=False) + "\n")
+    print("Cohen Kappa's Score for Partial Match is : " + str(cohen_kappa))
 
 if __name__ == "__main__":
     main()

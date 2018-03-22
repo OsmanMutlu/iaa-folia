@@ -5,7 +5,7 @@ import codecs
 
 docfile = sys.argv[1]
 doc = folia.Document(file=docfile)
-htmlfile = re.sub(r"^(\/home\/osman\/work\/iaa\/)xmls(\/.*)folia\.xml$", r"\g<1>htmls\g<2>html", docfile)
+htmlfile = re.sub(r"^(\/home\/osman\/work\/iaa-folia\/)xmls(\/.*)folia\.xml$", r"\g<1>htmls\g<2>html", docfile)
 
 both_entity = []
 doc1_entity = []
@@ -31,20 +31,20 @@ for sentence in doc.sentences():
     for word in sentence.words():
 
         if any(word in entity.wrefs() for entity in both_entity):
-            html = html + '<span style="background-color:green;" class="both">' + word.text() + '</span>' + ' '
+            html = html + '<span style="background-color:green;" class="both">' + word.text() + '</span>' + ' ' + '\n'
 
         elif any(word in entity.wrefs() for entity in doc1_entity) and any(word in entity.wrefs() for entity in doc2_entity):
             print("Found one!")
-            html = html + '<span style="background-color:green;" class="both">' + word.text() + '</span>' + ' '
+            html = html + '<span style="background-color:green;" class="both">' + word.text() + '</span>' + ' ' + '\n'
 
         elif any(word in entity.wrefs() for entity in doc1_entity):
-            html = html + '<span style="background-color:blue;" class="doc1">' + word.text() + '</span>' + ' '
+            html = html + '<span style="background-color:blue;" class="doc1">' + word.text() + '</span>' + ' ' + '\n'
 
         elif any(word in entity.wrefs() for entity in doc2_entity):
-            html = html + '<span style="background-color:red;" class="doc2">' + word.text() + '</span>' + ' '
+            html = html + '<span style="background-color:red;" class="doc2">' + word.text() + '</span>' + ' ' + '\n'
 
         else:
-            html = html + '<span>' + word.text() + '</span>' + ' '
+            html = html + '<span>' + word.text() + '</span>' + ' ' + '\n'
 
 html = html + '</p></body></html>'
 
