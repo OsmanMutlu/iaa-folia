@@ -5,7 +5,7 @@ import codecs
 
 docfile = sys.argv[1]
 doc = folia.Document(file=docfile)
-htmlfile = re.sub(r"^(\/home\/osman\/work\/iaa-folia\/)xmls(\/.*)folia\.xml$", r"\g<1>htmls\g<2>html", docfile)
+htmlfile = re.sub(r"^xmls(\/.*)folia\.xml$", r"htmls\g<1>html", docfile)
 
 both_entity = []
 doc1_entity = []

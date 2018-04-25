@@ -184,7 +184,7 @@ def main():
             counter = counter + 1
 
         xml = re.sub(r"<altlayer[^>]*>|<\/altlayers?>", r"", xml)
-        xml = re.sub(r"\s*<entity annotator=\"(Know-it-all|selim)\"[^<]*(<wref[^>]*>\s*)*\s*<\/entity>\s*", r"", xml)
+        xml = re.sub(r"\s*<entity annotator=\"(Know-it-all|selim)\"[^<]*(<wref[^>]*>\s*)*\s*(<comment[^<]<\/comment>\s*)*\s*<\/entity>\s*", r"", xml)
 
         filename = re.sub(r"^both_[^_]+_(.*)\.folia\.xml$", r"xmls/both_\g<1>.folia.xml", args[1])
 

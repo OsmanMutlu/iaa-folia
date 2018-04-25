@@ -21,7 +21,7 @@ BOTH_TARGET=$(echo ${doc1} | sed 's/batch\/selim_/both_Targeted_/')
 rm $BOTH
 mv $BOTH_EVENT xmls/$BOTH_EVENT
 
-python3 foliatohtml.py /home/osman/work/iaa-folia/xmls/$BOTH_EVENT
+python3 foliatohtml.py xmls/$BOTH_EVENT
 
 mv xmls/$BOTH_EVENT $BOTH_EVENT
 
@@ -83,7 +83,6 @@ else
 fi
 
 
-#python3 foliamerge.py -a /home/osman/work/iaa-folia/xmls/$BOTH_EVENT /home/osman/work/iaa-folia/xmls/$BOTH_PART /home/osman/work/iaa-folia/xmls/$BOTH_ORG /home/osman/work/iaa-folia/xmls/$BOTH_TARGET
 #cp /home/osman/work/iaa-folia/xmls/$BOTH_EVENT /home/osman/work/iaa-folia/xmls/$BOTH
 
 mv $BOTH_EVENT xmls/$BOTH_EVENT
@@ -91,11 +90,11 @@ mv $BOTH_PART xmls/$BOTH_PART
 mv $BOTH_ORG xmls/$BOTH_ORG
 mv $BOTH_TARGET xmls/$BOTH_TARGET
 
-python3 foliatohtml.py /home/osman/work/iaa-folia/xmls/$BOTH_PART
-python3 foliatohtml.py /home/osman/work/iaa-folia/xmls/$BOTH_ORG
-python3 foliatohtml.py /home/osman/work/iaa-folia/xmls/$BOTH_TARGET
+python3 foliatohtml.py xmls/$BOTH_PART
+python3 foliatohtml.py xmls/$BOTH_ORG
+python3 foliatohtml.py xmls/$BOTH_TARGET
 
-rm /home/osman/work/iaa-folia/xmls/$BOTH_EVENT
-rm /home/osman/work/iaa-folia/xmls/$BOTH_PART
-rm /home/osman/work/iaa-folia/xmls/$BOTH_ORG
-rm /home/osman/work/iaa-folia/xmls/$BOTH_TARGET
+rm xmls/$BOTH_EVENT
+rm xmls/$BOTH_PART
+rm xmls/$BOTH_ORG
+rm xmls/$BOTH_TARGET

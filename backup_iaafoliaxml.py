@@ -521,7 +521,7 @@ def main():
 
                 partial_miss_count = partial_miss_count + len(target_vals4) - 1
 
-    bothfolia.save("/home/osman/work/iaa/xmls/both_" + foliaset[57:-13] + re.sub(r"^both_(.*)", r"_\g<1>", bothfile))
+    bothfolia.save("/home/osman/Dropbox/work/iaa/xmls/both_" + foliaset[57:-13] + re.sub(r"^both_(.*)", r"_\g<1>", bothfile))
 
     truean = truean + partial_match_count
     falsean = falsean + partial_miss_count

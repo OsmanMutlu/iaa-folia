@@ -1,5 +1,6 @@
 *.xml
 *.html
+*.jl
 htmls/
 xmls/
 batch/

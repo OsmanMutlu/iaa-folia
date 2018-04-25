@@ -3,12 +3,14 @@ import sys
 import codecs
 from pynlpl.formats import fql, folia
 
+#This is the equalavent of foliamerge.py, but it takes one argument (Focus)
+
 filename = sys.argv[1]
 
 with codecs.open(filename, "r", "utf-8") as f:
     xml = f.read()
 
-xml = re.sub(r"\s*<entity annotator=\"(Know-it-all|selim)\"[^<]*(<wref[^>]*>\s*)*\s*<\/entity>\s*", r"", xml)
+xml = re.sub(r"\s*<entity annotator=\"(Know-it-all|selim)\"[^<]*(<wref[^>]*>\s*)*\s*(<comment[^<]<\/comment>\s*)*\s*<\/entity>\s*", r"", xml)
 
 filename = re.sub(r"^both_[^_]+_(.*)\.folia\.xml$", r"xmls/both_\g<1>.folia.xml", filename)
 
