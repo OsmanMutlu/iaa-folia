@@ -108,3 +108,41 @@
 {"tag_count": {"Participant_emp": 1, "Participant_type": 9}, "kappa": 0.41038961038961036, "kappa_part": 0.16264252179745137, "kappa_miss": 0.41038961038961036, "kappa_part_miss": 0.16264252179745137}
 {"kappa_part": 0.590990990990991, "kappa_miss": 0.7455156950672646, "kappa": 0.7455156950672646, "tag_count": {"Organizer_type": 2, "Organizer_name": 5}, "kappa_part_miss": 0.590990990990991}
 {"kappa_miss": -0.008888888888888889, "tag_count": {"Targeted_caste": 1, "Targeted_type": 1}, "kappa_part_miss": -0.013392857142857144, "kappa_part": -0.013392857142857144, "kappa": -0.008888888888888889}
+{"tag_count": {"Event_etype": 22, "Event_motive": 2, "Event_place_pub": 2, "Event_etime": 10, "Event_rural": 4, "Event_eptime": 2, "Event_doc_title": 2, "Event_loc": 8, "Event_place": 22, "Event_wtype": 8, "Event_fname": 2}, "kappa_part": 1.0, "kappa_part_miss": 1.0, "kappa": 1.0, "kappa_miss": 1.0}
+{"kappa": 1.0, "kappa_miss": 1.0, "kappa_part": 1.0, "kappa_part_miss": 1.0, "tag_count": {"Participant_type": 16}}
+{"tag_count": {"Organizer_name": 8, "Organizer_type": 2}, "kappa_miss": 1.0, "kappa_part": 1.0, "kappa": 1.0, "kappa_part_miss": 1.0}
+{"kappa_miss": -0.0033726812816188873, "tag_count": {"Target_type": 2}, "kappa": -0.0033726812816188873, "kappa_part_miss": 0.32995495495495497, "kappa_part": 0.32995495495495497}
+{"kappa": 0.8984527564969206, "tag_count": {"Event_place": 3, "Event_eptime": 3, "Event_motive": 18, "Event_doc_title": 2, "Event_etype": 12, "Event_place_pub": 2}, "kappa_part": 0.8984527564969206, "kappa_miss": 0.8984527564969206, "kappa_part_miss": 0.8984527564969206}
+{"kappa_miss": 0.8858493752110773, "tag_count": {"Participant_sector": 1, "Participant_type": 6, "Participant_pname": 2}, "kappa_part": 0.796996996996997, "kappa_part_miss": 0.8858493752110773, "kappa": 0.796996996996997}
+{"kappa": 1.0, "kappa_part_miss": 1.0, "kappa_part": 1.0, "tag_count": {"Target_type": 8}, "kappa_miss": 1.0}
+{"kappa_part_miss": 0.7165969316596931, "kappa": 0.5946377274178104, "kappa_part": 0.7165969316596931, "tag_count": {"Event_eptime": 2, "Event_doc_title": 2, "Event_fname": 2, "Event_place": 4, "Event_place_pub": 2, "Event_etype": 6, "Event_loc": 3}, "kappa_miss": 0.5946377274178104}
+{"kappa_miss": 0.6199027310138421, "kappa_part_miss": 0.6199027310138421, "kappa": 1.0, "tag_count": {"Participant_ideology": 2, "Participant_pname": 2, "Participant_type": 4, "Participant_count": 2}, "kappa_part": 1.0}
+{"kappa": 1.0, "kappa_part": 1.0, "tag_count": {"Event_eptime": 2, "Event_place": 11, "Event_etype": 10, "Event_fname": 1, "Event_place_pub": 2, "Event_rural": 2, "Event_motive": 2, "Event_etime": 4, "Event_loc": 2, "Event_doc_title": 2}, "kappa_miss": 0.8871794871794872, "kappa_part_miss": 0.8871794871794872}
+{"kappa_part_miss": 1.0, "kappa_part": 1.0, "kappa": 1.0, "tag_count": {"Participant_type": 4}, "kappa_miss": 1.0}
+{"tag_count": {"Organizer_name": 4}, "kappa_miss": 1.0, "kappa_part_miss": 1.0, "kappa": 1.0, "kappa_part": 1.0}
+{"tag_count": {"Target_name": 8, "Target_type": 10}, "kappa_part_miss": 1.0, "kappa": 1.0, "kappa_miss": 1.0, "kappa_part": 1.0}
+{"kappa": 0.8988095238095237, "kappa_part": 0.8988095238095237, "kappa_miss": 0.8506451908117507, "tag_count": {"Event_place_pub": 2, "Event_doc_title": 2, "Event_motive": 2, "Event_place": 24, "Event_wtype": 3, "Event_loc": 13, "Event_eptime": 3, "Event_urban": 1, "Event_rural": 11, "Event_etype": 23, "Event_etime": 8}, "kappa_part_miss": 0.8506451908117507}
+{"kappa": 0.7701732150401353, "kappa_part": 0.5641025641025642, "tag_count": {"Participant_type": 13, "Participant_pname": 1, "Participant_ideology": 2}, "kappa_miss": 0.8105189829327761, "kappa_part_miss": 0.6234772978959026}
+{"tag_count": {"Organizer_name": 5}, "kappa": 0.6629491945477075, "kappa_part": 0.6629491945477075, "kappa_miss": 0.6629491945477075, "kappa_part_miss": 0.6629491945477075}
+{"kappa": 1.0, "kappa_miss": 1.0, "tag_count": {"Target_type": 10, "Target_name": 4}, "kappa_part": 1.0, "kappa_part_miss": 1.0}
+{"kappa_part_miss": 1.0, "kappa_part": 1.0, "kappa": 1.0, "tag_count": {"Event_wtype": 4, "Event_place": 6, "Event_place_pub": 2, "Event_etime": 2, "Event_doc_title": 2, "Event_etype": 4, "Event_eptime": 2}, "kappa_miss": 1.0}
+{"kappa_part": 0.7844736842105263, "kappa": 0.7727840199750312, "kappa_miss": 0.7727840199750312, "kappa_part_miss": 0.7844736842105263, "tag_count": {"Participant_type": 18, "Participant_count": 4, "Participant_religion": 2, "Participant_ideology": 1, "Participant_pname": 7}}
+{"kappa_part_miss": 0.32870370370370366, "kappa": 0.32870370370370366, "kappa_part": 0.32870370370370366, "tag_count": {"Organizer_type": 1, "Organizer_orgses": 1, "Organizer_name": 2}, "kappa_miss": 0.32870370370370366}
+{"kappa": 0.8029458598726115, "tag_count": {"Event_fname": 4, "Event_eptime": 2, "Event_etype": 5, "Event_doc_title": 2, "Event_loc": 2, "Event_motive": 10, "Event_place": 4}, "kappa_part": 0.8883059739380605, "kappa_part_miss": 0.8883059739380605, "kappa_miss": 0.8029458598726115}
+{"kappa_part_miss": 0.7469325153374233, "kappa_miss": 0.7469325153374233, "tag_count": {"Participant_type": 6, "Participant_partses": 1}, "kappa": 0.7469325153374233, "kappa_part": 0.7469325153374233}
+{"kappa_miss": 0.484375, "kappa": 0.484375, "kappa_part_miss": 0.41451612903225804, "kappa_part": 0.41451612903225804, "tag_count": {"Organizer_orgses": 4, "Organizer_name": 6, "Organizer_type": 5}}
+{"kappa_miss": 0.9212487695120237, "kappa_part": 0.8534798534798534, "tag_count": {"Event_etype": 8, "Event_eptime": 3, "Event_doc_title": 2, "Event_place": 2, "Event_place_pub": 2, "Event_fname": 4, "Event_motive": 4}, "kappa": 0.9212487695120237, "kappa_part_miss": 0.8534798534798534}
+{"tag_count": {"Participant_type": 2, "Participant_sector": 4, "Participant_pname": 2, "Participant_partses": 6}, "kappa_miss": 1.0, "kappa_part": 1.0, "kappa": 1.0, "kappa_part_miss": 1.0}
+{"kappa_part_miss": 0.3834862385321101, "kappa_part": 0.3834862385321101, "kappa_miss": 0.39459459459459456, "tag_count": {"Organizer_type": 3, "Organizer_name": 2, "Organizer_osector": 2}, "kappa": 0.39459459459459456}
+{"kappa_part": 1.0, "kappa_miss": 1.0, "kappa_part_miss": 1.0, "tag_count": {"Target_name": 4}, "kappa": 1.0}
+{"kappa_part": 1.0, "kappa": 1.0, "tag_count": {"Participant_type": 4, "Participant_religion": 4}, "kappa_part_miss": 1.0, "kappa_miss": 1.0}
+{"kappa_part": 0.9297362110311751, "kappa": 0.9043004899292324, "kappa_miss": 0.9043004899292324, "kappa_part_miss": 0.9297362110311751, "tag_count": {"Event_etype": 28, "Event_urban": 1, "Event_doc_title": 2, "Event_rural": 10, "Event_place": 27, "Event_loc": 2, "Event_place_pub": 4, "Event_etime": 8, "Event_eptime": 2}}
+{"kappa": 0.797698504027618, "kappa_part_miss": 0.7238165060745706, "kappa_part": 0.7238165060745706, "tag_count": {"Participant_type": 13, "Participant_count": 1, "Participant_ethnicity": 4}, "kappa_miss": 0.797698504027618}
+{"kappa": 1.0, "tag_count": {"Organizer_name": 1, "Organizer_ideology": 1}, "kappa_part_miss": -0.002280501710376283, "kappa_part": 1.0, "kappa_miss": -0.002280501710376283}
+{"tag_count": {"Target_name": 23, "Target_type": 7, "Target_religion": 5, "Target_ethnicity": 1}, "kappa": 0.1306299452221546, "kappa_miss": 0.11273929690219284, "kappa_part": 0.07838072831423894, "kappa_part_miss": 0.06692400482509046}
+{"kappa": 0.4145363408521303, "tag_count": {"Participant_pname": 2, "Participant_type": 8}, "kappa_part": 0.4145363408521303, "kappa_part_miss": 0.4145363408521303, "kappa_miss": 0.4145363408521303}
+{"tag_count": {"Organizer_name": 6, "Organizer_type": 4}, "kappa_part_miss": 0.4859154929577465, "kappa_part": 0.4859154929577465, "kappa_miss": 0.6596736596736597, "kappa": 0.6596736596736597}
+{"kappa_part_miss": 1.0, "tag_count": {"Target_type": 4, "Target_name": 2}, "kappa_part": 1.0, "kappa_miss": 1.0, "kappa": 1.0}
+{"kappa_miss": 1.0, "kappa_part_miss": 1.0, "kappa_part": 1.0, "kappa": 1.0, "tag_count": {"Event_place_pub": 2, "Event_eptime": 2, "Event_rural": 2, "Event_etime": 4, "Event_place": 10, "Event_etype": 16, "Event_doc_title": 2}}
+{"tag_count": {"Organizer_name": 4}, "kappa_miss": 1.0, "kappa_part": 1.0, "kappa": 1.0, "kappa_part_miss": 1.0}
+{"tag_count": {"Target_type": 8}, "kappa_part": 1.0, "kappa": 1.0, "kappa_part_miss": 1.0, "kappa_miss": 1.0}

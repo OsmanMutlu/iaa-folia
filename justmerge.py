@@ -7,7 +7,7 @@ from __future__ import print_function, unicode_literals, division, absolute_impo
 #Osman
 import re
 import codecs
-
+from pprint import pprint
 import getopt
 import sys
 try:
@@ -178,19 +178,26 @@ def main():
             else:
                 same_ents.append(ent)
 
+        print(uniq_ents)
+        print(same_ents)
         for ent in same_ents:
             replaced_ent = "entity." + str(counter) + '"'
+            print(ent + " to " + replaced_ent)
             xml = re.sub(ent, replaced_ent, xml, 1)
             counter = counter + 1
 
         xml = re.sub(r"<altlayer[^>]*>|<\/altlayers?>", r"", xml)
-        xml = re.sub(r"\s*<entity annotator=\"(Know-it-all|selim)\"[^<]*(<wref[^>]*>\s*)*\s*(<comment[^<]<\/comment>\s*)*\s*<\/entity>\s*", r"", xml)
+#        xml = re.sub(r"\s*<entity annotator=\"(Know-it-all|selim)\"[^<]*(<wref[^>]*>\s*)*\s*(<comment[^<]<\/comment>\s*)*\s*<\/entity>\s*", r"", xml)
 
-        filename = re.sub(r"^both_[^_]+_(.*)\.folia\.xml$", r"xmls/both_\g<1>.folia.xml", args[1])
-
+#        filename = re.sub(r"^(.*)sumercan_(.*)\.folia\.xml$", r"\g<1>both_\g<2>.folia.xml", args[1])
+        annot_2 = re.sub(r"^.*\/([^\/]*)\/[^\/]*$", r"\g<1>", args[1])
+        print(annot_2)
+        filename = "../adjudication/" + args[0]
+        print(filename)
         with codecs.open(filename, "w", "utf-8") as f:
             f.write(xml)
 
+# This is the part where we add the both annotation to the doc
         doc1_entity = []
         doc2_entity = []
 
@@ -202,19 +209,20 @@ def main():
 
                 for entity in layer.select(folia.Entity):
 
-                    if entity.annotator == "Doc1":
-                        doc1_entity.append(entity)
-
-                    elif entity.annotator == "Doc2":
+                    if entity.annotator == annot_2:
                         doc2_entity.append(entity)
 
-            for word in sentence.words():
+                    else:
+                        doc1_entity.append(entity)
 
-                if any(word in entity.wrefs() for entity in doc1_entity) and any(word in entity.wrefs() for entity in doc2_entity):
-                    for entity1 in doc1_entity:
-                        for entity2 in doc2_entity:
-                            if (word in entity1.wrefs()) and (word in entity2.wrefs()) and (entity1.cls == entity2.cls):
-                                word.add(folia.Entity, word, cls=entity1.cls, set=entity1.set, annotator="BothPart")
+        for entity1 in doc1_entity:
+            for entity2 in doc2_entity:
+                sorted_doc1 = sorted([word.id for word in entity1.wrefs()])
+                sorted_doc2 = sorted([word.id for word in entity2.wrefs()])
+                if (sorted_doc1 == sorted_doc2) and (entity1.cls == entity2.cls) and (entity1.set == entity2.set):
+                    entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), cls=entity1.cls, set=entity1.set, annotator="Both")
+                    entity1.parent.remove(entity1)
+                    entity2.parent.remove(entity2)
 
         doc.save()
 #-Osman

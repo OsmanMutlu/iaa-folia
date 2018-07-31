@@ -1,3 +1,5 @@
+*.tsv
+*.csv
 *.xml
 *.html
 *.jl
@@ -5,3 +7,6 @@ htmls/
 xmls/
 batch/
 backup_xmls/
+score/
+\~/
+~/
