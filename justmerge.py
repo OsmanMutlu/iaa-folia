@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# -*- coding: utf8 -*-
+# -*- coding: utf-8 -*-
 
 
 from __future__ import print_function, unicode_literals, division, absolute_import
@@ -67,7 +67,7 @@ def mergechildren(parent, outputdoc, asalternative):
                 #print("DEBUG: Adding annotation type " + e.__class__.__name__ + ", set " + e.set + ", under " + newparent.id, file=sys.stderr)
                 if asalternative:
                     if isinstance(e, folia.AbstractTokenAnnotation):
-                        print("Adding Annotation type " + e.__class__.__name__ + ", set " + str(e.set) + " to " + newparent.id + " as alternative", file=sys.stderr)
+                        #print("Adding Annotation type " + e.__class__.__name__ + ", set " + str(e.set) + " to " + newparent.id + " as alternative", file=sys.stderr)
                         alt = newparent.append(folia.Alternative, generate_id_in=newparent)
                         reID(newparent.doc, e, newparent.id, alt.id)
                         alt.append(e)
@@ -77,7 +77,7 @@ def mergechildren(parent, outputdoc, asalternative):
                         e.merged = True
                         merges += 1
                     elif isinstance(e, folia.AbstractAnnotationLayer):
-                        print("Adding Annotation type " + e.__class__.__name__ + ", set " + str(e.set) + " to " + newparent.id + " as alternative", file=sys.stderr)
+                        #print("Adding Annotation type " + e.__class__.__name__ + ", set " + str(e.set) + " to " + newparent.id + " as alternative", file=sys.stderr)
                         alt = newparent.append(folia.AlternativeLayers, generate_id_in=newparent)
                         reID(newparent.doc, e, newparent.id, alt.id)
                         alt.append(e)
@@ -87,13 +87,13 @@ def mergechildren(parent, outputdoc, asalternative):
                         e.merged = True
                         merges += 1
                 elif isinstance(e, folia.AbstractTokenAnnotation) and newparent.hasannotation(e.__class__, e.set):
-                    print("Annotation type " + e.__class__.__name__ + ", set " + e.set + ", under " + newparent.id + " , already exists... skipping", file=sys.stderr)
+                    #print("Annotation type " + e.__class__.__name__ + ", set " + e.set + ", under " + newparent.id + " , already exists... skipping", file=sys.stderr)
                     pass
                 elif isinstance(e, folia.AbstractAnnotationLayer) and newparent.hasannotationlayer(e.__class__, e.set):
-                    print("Annotation type " + e.__class__.__name__ + ", set " + e.set + ", under " + newparent.id + " , already exists... skipping", file=sys.stderr)
+                    #print("Annotation type " + e.__class__.__name__ + ", set " + e.set + ", under " + newparent.id + " , already exists... skipping", file=sys.stderr)
                     pass
                 else:
-                    print("Adding Annotation type " + e.__class__.__name__ + ", set " + str(e.set) + " to " + newparent.id, file=sys.stderr)
+                    #print("Adding Annotation type " + e.__class__.__name__ + ", set " + str(e.set) + " to " + newparent.id, file=sys.stderr)
                     newparent.append(e)
                     assert e.parent is newparent
                     e.setdoc(outputdoc)
@@ -111,13 +111,13 @@ def foliamerge(outputfile, *files, **kwargs):
     merges = 0
 
     for i, filename in enumerate(files):
-        print("Processing " + filename, file=sys.stderr)
+        #print("Processing " + filename, file=sys.stderr)
         inputdoc = folia.Document(file=filename)
         if i == 0:
-             print("(pivot document)",file=sys.stderr)
+             #print("(pivot document)",file=sys.stderr)
              outputdoc = inputdoc
         else:
-            print("(merging document)",file=sys.stderr)
+            #print("(merging document)",file=sys.stderr)
 
             for annotationtype,set in inputdoc.annotations:
                 if not outputdoc.declared(annotationtype,set):
@@ -165,6 +165,7 @@ def main():
     outputdoc = foliamerge(outputfile, *args, asalternative=asalternative)
 
     if not outputfile:
+        #print(outputdoc.xmlstring())
         xml = outputdoc.xmlstring()
 
 #Osman-
@@ -178,11 +179,11 @@ def main():
             else:
                 same_ents.append(ent)
 
-        print(uniq_ents)
-        print(same_ents)
+        #print(uniq_ents)
+        #print(same_ents)
         for ent in same_ents:
             replaced_ent = "entity." + str(counter) + '"'
-            print(ent + " to " + replaced_ent)
+            #print(ent + " to " + replaced_ent)
             xml = re.sub(ent, replaced_ent, xml, 1)
             counter = counter + 1
 
@@ -191,7 +192,7 @@ def main():
 
 #        filename = re.sub(r"^(.*)sumercan_(.*)\.folia\.xml$", r"\g<1>both_\g<2>.folia.xml", args[1])
         annot_2 = re.sub(r"^.*\/([^\/]*)\/[^\/]*$", r"\g<1>", args[1])
-        print(annot_2)
+#        print(annot_2)
         filename = "../adjudication/" + args[0]
         print(filename)
         with codecs.open(filename, "w", "utf-8") as f:
@@ -200,6 +201,7 @@ def main():
 # This is the part where we add the both annotation to the doc
         doc1_entity = []
         doc2_entity = []
+        tobedeleted = []
 
         doc = folia.Document(file=filename)
 
@@ -219,12 +221,42 @@ def main():
             for entity2 in doc2_entity:
                 sorted_doc1 = sorted([word.id for word in entity1.wrefs()])
                 sorted_doc2 = sorted([word.id for word in entity2.wrefs()])
-                if (sorted_doc1 == sorted_doc2) and (entity1.cls == entity2.cls) and (entity1.set == entity2.set):
-                    entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), cls=entity1.cls, set=entity1.set, annotator="Both")
-                    entity1.parent.remove(entity1)
-                    entity2.parent.remove(entity2)
+                entity1_comment = ""
+                entity2_comment = ""
+                if type(entity1[-1]) == folia.Comment:
+                    entity1_comment = entity1[-1].value
+                if type(entity2[-1]) == folia.Comment:
+                    entity2_comment = entity2[-1].value
+
+                if (sorted_doc1 == sorted_doc2) and (entity1.cls == entity2.cls) and (entity1.set == entity2.set) and (entity1_comment == entity2_comment):
+                    if entity1_comment == "":
+                        entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), cls=entity1.cls, set=entity1.set, annotator="Both", annotatortype="auto")
+                    else:
+                        entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), folia.Comment(doc, value=entity1_comment, annotator="Both", annotatortype="auto"), cls=entity1.cls, set=entity1.set, annotator="Both", annotatortype="auto")
+                    # entity1.annotator = "Both"
+                    # entity1.annotatortype = "auto"
+                    # new_entity.children.push({'type':'comment', 'value':entity1_comment})
+                    try:
+                        entity1.parent.remove(entity1)
+                        entity2.parent.remove(entity2)
+                    except:
+                        print("No Parent, Can't delete")
+                        tobedeleted.append(entity1.id)
+                        tobedeleted.append(entity2.id)
 
         doc.save()
+
+        if tobedeleted:
+            with codecs.open(filename, "r", "utf-8") as g:
+
+                xml = g.read()
+                for id in tobedeleted:
+                    regex = '\s*<entity.*xml:id="' + re.escape(id) + '">(.|\s)*?<\/entity>'
+                    re.sub(regex, r'', xml)
+
+            with codecs.open(filename, "w", "utf-8") as h:
+                h.write(xml)
+
 #-Osman
 """
         if sys.version < '3':
