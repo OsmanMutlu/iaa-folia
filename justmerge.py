@@ -204,6 +204,7 @@ def main():
         tobedeleted = []
 
         doc = folia.Document(file=filename)
+        doc.metadata["Done"] = "No"
 
         for sentence in doc.sentences():
 
@@ -224,15 +225,15 @@ def main():
                 entity1_comment = ""
                 entity2_comment = ""
                 if type(entity1[-1]) == folia.Comment:
-                    entity1_comment = entity1[-1].value
+                    entity1_comment = entity1[-1].value.lower()
                 if type(entity2[-1]) == folia.Comment:
-                    entity2_comment = entity2[-1].value
+                    entity2_comment = entity2[-1].value.lower()
 
                 if (sorted_doc1 == sorted_doc2) and (entity1.cls == entity2.cls) and (entity1.set == entity2.set) and (entity1_comment == entity2_comment):
                     if entity1_comment == "":
                         entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), cls=entity1.cls, set=entity1.set, annotator="Both", annotatortype="auto")
                     else:
-                        entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), folia.Comment(doc, value=entity1_comment, annotator="Both", annotatortype="auto"), cls=entity1.cls, set=entity1.set, annotator="Both", annotatortype="auto")
+                        entity1.wrefs()[0].add(folia.Entity, *entity1.wrefs(), folia.Comment(doc, value=entity1[-1].value, annotator="Both", annotatortype="auto"), cls=entity1.cls, set=entity1.set, annotator="Both", annotatortype="auto")
                     # entity1.annotator = "Both"
                     # entity1.annotatortype = "auto"
                     # new_entity.children.push({'type':'comment', 'value':entity1_comment})
